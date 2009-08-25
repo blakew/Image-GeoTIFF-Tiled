@@ -1,0 +1,15 @@
+TIFF Directory at offset 0x73463a (7554618)
+  Subfile Type: (0 = 0x0)
+  Image Width: 5022 Image Length: 6785
+  Tile Width: 64 Tile Length: 64
+  Resolution: 72, 72 pixels/inch
+  Bits/Sample: 8
+  Compression Scheme: PackBits
+  Photometric Interpretation: palette color (RGB from colormap)
+  Samples/Pixel: 1
+  Planar Configuration: single image plane
+  Color Map: (present)
+  Tag 33550: 2.438400,2.438400,0.000000
+  Tag 33922: 0.000000,0.000000,0.000000,730232.510430,4557035.326668,0.000000
+  Tag 34735: 1,1,0,4,1024,0,1,1,1025,0,1,1,3072,0,1,32617,3073,34737,25,0
+  Tag 34737: UTM Zone 17 N with WGS84|
