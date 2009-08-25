@@ -90,7 +90,7 @@ sub get_iterator_pix {
 
 sub dump_tile {
 	my ($self,$tile) = @_;
-	croak "No tile specied" unless $tile;
+	croak "No tile specified" unless defined $tile;
 	my $buffer = $self->get_tile($tile);
 	local $| = 1;
     for ( 0 .. $self->tile_size - 1 ) {

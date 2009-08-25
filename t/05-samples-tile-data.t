@@ -8,17 +8,20 @@ use Geo::TiledTIFF;
 for my $tiff (<./samples/usgs*.tif>) {
     my $image = Geo::TiledTIFF->new($tiff);
     my $tile = $image->get_tile(0);
-    my @test;
-    for ( 0..$image->tile_size - 1 ) { 
-        $test[$_] = 1; 
+#    $image->dump_tile(0);
+    my $ok = 1;
+    for my $v ( @$tile ) {
+        $ok = 0 unless grep { $v == $_ } qw/ 0 1 4 /;
     }
-    is_deeply( $tile, \@test, 'Tile data' );
+    ok( $ok, 'First tile' );
 
-    @test = ( [ $tile ] );
+    my @test = ( [ $tile ] );
     $tile = $image->get_tiles(0,0);
     is_deeply( $tile, \@test, '3D Tile data' );
 
-    my ($ul,$ur,$bl,$br) = (122,123,122 + $image->tile_step,123 + $image->tile_step);
+    my $tile_no = 122;
+    my ($ul,$ur,$bl,$br) = ($tile_no,$tile_no + 1,$tile_no + $image->tile_step,$tile_no + 1 + $image->tile_step);
+#    print "Tiles: $ul, $ur, $bl, $br\n";
     my @tiles = ( 
         [ $image->get_tile($ul), $image->get_tile($ur) ],
         [ $image->get_tile($bl), $image->get_tile($br) ]
