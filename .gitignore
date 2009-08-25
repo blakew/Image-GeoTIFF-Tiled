@@ -15,6 +15,7 @@
 # Ignore backup vim files
 *.*~
 *~
+*.swp
 
 # Ignore _Inline directory
 _Inline/

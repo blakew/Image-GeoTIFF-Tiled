@@ -10,7 +10,7 @@ for my $tiff (<./samples/usgs*.tif>) {
     my $tile = $image->get_tile(0);
     my @test;
     for ( 0..$image->tile_size - 1 ) { 
-        $test[$_] = ; 
+        $test[$_] = 1; 
     }
     is_deeply( $tile, \@test, 'Tile data' );
 
@@ -18,7 +18,7 @@ for my $tiff (<./samples/usgs*.tif>) {
     $tile = $image->get_tiles(0,0);
     is_deeply( $tile, \@test, '3D Tile data' );
 
-    my ($ul,$ur,$bl,$br) = (50000,50001,50000 + $image->tile_step,50001 + $image->tile_step);
+    my ($ul,$ur,$bl,$br) = (122,123,122 + $image->tile_step,123 + $image->tile_step);
     my @tiles = ( 
         [ $image->get_tile($ul), $image->get_tile($ur) ],
         [ $image->get_tile($bl), $image->get_tile($br) ]
