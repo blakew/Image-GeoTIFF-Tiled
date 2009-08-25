@@ -1,5 +1,6 @@
-Revision history for Geo-TiledTIFF
+Revision history for Perl extension Geo::TiledTIFF.
 
-0.01    Date/time
-        First version, released on an unsuspecting world.
+0.01  Tue Aug 18 17:32:36 2009
+	- original version; created by h2xs 1.23 with options
+		--compat-version=5.6.0 -PAXn Geo::TiledTIFF
 

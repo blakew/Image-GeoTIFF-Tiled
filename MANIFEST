@@ -1,8 +1,11 @@
 Changes
-MANIFEST
 Makefile.PL
+MANIFEST
 README
 lib/Geo/TiledTIFF.pm
-t/00-load.t
-t/pod-coverage.t
-t/pod.t
+lib/Geo/TiledTIFF/Shape.pm
+lib/Geo/TiledTIFF/ShapePart.pm
+lib/Geo/TiledTIFF/Iterator.pm
+lib/t/00-load.t
+lib/t/pod.t
+lib/t/pod-coverage.t

@@ -1,42 +1,29 @@
-Geo-TiledTIFF
+Geo-TiledTIFF version 0.01
+==========================
 
 A Perl interface to libgeotiff for tiled TIFF images, with support for extracting and iterating arbitrary shapes.
 
 INSTALLATION
 
-To install this module, run the following commands:
+To install this module type the following:
 
-	perl Makefile.PL
-	make
-	make test
-	make install
+   perl Makefile.PL
+   make
+   make test
+   make install
 
-SUPPORT AND DOCUMENTATION
+DEPENDENCIES
 
-After installing, you can find documentation for this module with the
-perldoc command.
+This module requires these other modules and libraries:
 
-    perldoc Geo::TiledTIFF
-
-You can also look for information at:
-
-    RT, CPAN's request tracker
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Geo-TiledTIFF
-
-    AnnoCPAN, Annotated CPAN documentation
-        http://annocpan.org/dist/Geo-TiledTIFF
-
-    CPAN Ratings
-        http://cpanratings.perl.org/d/Geo-TiledTIFF
-
-    Search CPAN
-        http://search.cpan.org/dist/Geo-TiledTIFF/
-
+  Module::Load
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2009 Blake Willmarth
+Copyright (C) 2009 by Blake Willmarth
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself, either Perl version 5.10.0 or,
+at your option, any later version of Perl 5 you may have available.
+
 
