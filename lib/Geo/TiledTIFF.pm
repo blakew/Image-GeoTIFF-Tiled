@@ -2,23 +2,24 @@ package Geo::TiledTIFF;
 use strict;
 use warnings;
 use Carp;
-#use Data::Dumper;
 use Geo::TiledTIFF::Iterator;
 use Geo::TiledTIFF::Shape;
 
-#sub proj2pix_boundary_m {
-#    my ($self,@px_bound) = @_;
-#    $self->proj2pix_m($px_bound[0],$px_bound[1]);
-#    $self->proj2pix_m($px_bound[2],$px_bound[3]);
-#}
+#our $VERSION = '0.01';
+use vars '$VERSION';
+$VERSION = '0.01';
 
-#sub proj2pix_boundary {
-#    my ($self,@px_bound) = @_;
-#    return (
-#        $self->proj2pix($px_bound[0],$px_bound[1]),
-#        $self->proj2pix($px_bound[2],$px_bound[3])
-#    );
-#}
+use Inline C => Config => 
+             INC => '-I/usr/include/geotiff',
+             LIBS => '-ltiff -lgeotiff',
+             AUTO_INCLUDE => '#include <tiff.h>',
+             AUTO_INCLUDE => '#include <geotiff.h>',
+             AUTO_INCLUDE => '#include <xtiffio.h>' 
+            ;
+
+use Inline C => 'DATA',
+#    VERSION => '0.01',
+    NAME => 'Geo::TiledTIFF';
 
 sub _constrain_boundary {
     my ($self,$px_bound) = @_;
@@ -58,18 +59,14 @@ sub _constrain_boundary {
 
 sub get_iterator_shape {
     my ($self,$shape) = @_;
-#    $shape = Geo::TiledTIFF::Shape->load_shape($shape)
-#        if ( ref $shape and $shape->isa('Geo::ShapeFile::Shape') );
     croak "Need a Geo::TiledTIFF::Shape object" 
         unless ref $shape and $shape->isa('Geo::TiledTIFF::Shape');
     my @px_bound = ( $shape->boundary );
     unless ( $self->_constrain_boundary(\@px_bound) ) {
-#        carp "Boundary outside of image";
         return;
     }
 #    print "Extracting data from (@px_bound)...\n";
     my $data = $self->extract_2D_array(@px_bound,$shape);
-#    return unless ref $data eq 'ARRAY' and ref $data->[0] eq 'ARRAY' and @$data and @{$data->[0]};
     return Geo::TiledTIFF::Iterator->new({
         image => $self,
         boundary => \@px_bound,
@@ -107,27 +104,242 @@ sub dump_tile {
     }
 }
 
-sub _get_x_perl {
-    my ($shape,$y) = @_;
-    croak "Need a Geo::TiledTIFF::Shape object" unless
-            $shape->isa('Geo::TiledTIFF::Shape');
-    return $shape->get_x($y);
-}
+#sub _get_x_perl {
+#    my ($shape,$y) = @_;
+#    croak "Need a Geo::TiledTIFF::Shape object" unless
+#            $shape->isa('Geo::TiledTIFF::Shape');
+#    return $shape->get_x($y);
+#}
 
-use Inline C => Config => 
-             INC => '-I/usr/include/geotiff',
-#             LD => 'gcc -Wl,-rpath=/usr/local/lib',
-             LIBS => '-ltiff -lgeotiff'
-            ;
+#sub proj2pix_boundary_m {
+#    my ($self,@px_bound) = @_;
+#    $self->proj2pix_m($px_bound[0],$px_bound[1]);
+#    $self->proj2pix_m($px_bound[2],$px_bound[3]);
+#}
 
-use Inline C => <<'END_OF_C_CODE';
+#sub proj2pix_boundary {
+#    my ($self,@px_bound) = @_;
+#    return (
+#        $self->proj2pix($px_bound[0],$px_bound[1]),
+#        $self->proj2pix($px_bound[2],$px_bound[3])
+#    );
+#}
+
+1;
+
+#=head3 $t->proj2pix_boundary_m($x_min,$y_min,$x_max,$y_max)
+#
+#Transforms the given projection rectangular boundary to its corresponding pixel boundary (mutative).
+#
+#=head3 $t->proj2pix_boundary($x_min,$y_min,$x_max,$y_max)
+#
+#Transforms the given projection rectangular boundary, returning its corresponding pixel boundary as a list.
+#
+
+__DATA__
+
+=head1 NAME
+
+Geo::TiledTIFF - A Perl interface to libgeotiff for tiled TIFF images, with support for extracting and iterating arbitrary shapes.
+
+=head1 SYNOPSIS
+
+    use Geo::TiledTIFF;
+    
+    my $t = Geo::TiledTIFF->new( $image_file );
+    
+    # Dump meta info
+    $t->print_meta;
+    
+    # Convert to pixel coordinates
+    $t->proj2pix_m($lon,$lat);
+    # Compute tile number
+    my $tile = $t->get_tile_pix($lon,$lat);
+    # Get index into the tile
+    my $idx = $t->get_pix_idx($lon,$lat);
+    
+    my ($px,$py);
+    # Get pixel coordinates of 5th pixel in the 2nd tile
+    $t->set_pix_tile( 2, 5, $px, $py );
+    # Get the projected coordinates of the pixel coordinates
+    $t->pix2proj_m($px,$py);
+    
+    # Get an arrayref of tile data (500th tile)
+    my $tile = $t->get_tile(500);
+    # Get a 2x2 3D arrayref of tile data
+    my $tiles = $t->get_tiles(500,500 + $t->tile_step + 1);
+    # 50th pixel value in the upper right tile:    $tiles->[0][1][50]
+    
+    # Get an iterator for a rectangular pixel boundary:
+    my $iter = $t->get_iterator_pix( 
+        $t->get_pix_tile( 500, 0 ),
+        $t->get_pix_tile( 500 + $t->tile_step + 1, $t->tile_length * $t->tile_width - 1 )
+    );
+    # or: Get an iterator for an arbitrary shape
+    my $iter = $t->get_iterator_shape( $shape );
+    # Count the occurance of each pixel value
+    my %c;
+    $c{$v}++ while ( defined( my $v = $iter->next ) );
+    
+=head1 DESCRIPTION
+
+Geo::TiledTIFF provides an interface to libtiff and libgeotiff for raster data stored in tiled TIFF format conforming to the GeoTIFF specification. Several additional functions are provided for ease of access to the underlying geodata.
+
+This library is only meant to process tiled .tif images, and in fact will fail during construction if the image isn't tiled. To create a tiled TIFF from a non-tiled TIFF, see the command-line utility tifcp. Arbitrary raster data can be exported to the tiled TIFF format with GIS software, such as ArcGIS.
+
+=head1 METHODS
+
+=head2 CONSTRUCTOR
+
+=over
+
+=item new($tiff_filepath)
+
+Returns a new Geo::TiledTIFF instance corresponding to the given TIFF filepath. 
+
+An exception will be thrown if the filepath is invalid, if the image isn't tiled, if the bits per sample isn't 8, or if the samples per pixel isn't 1.
+
+=back
+
+=head2 IMAGE METADATA
+
+=over
+
+=item file
+
+The filepath of the TIFF image.
+
+=item length
+
+The length (height) of the image in pixels.
+
+=item width
+
+The width of the image in pixels.
+
+=item tile_length
+
+The length (height) of a single tile in pixels.
+
+=item tile_width
+
+The width of a single tile in pixels.
+
+=item tile_size
+
+The total size (in bytes) of a tile of pixels (= tile_width * tile_length if bps = 1).
+
+=item tile_step
+
+The number of tiles in a row of the image.
+
+=item dump_tile($tile)
+
+Pretty-prints the given tile.
+
+=back
+
+=head2 PIXEL-PROJECTION TRANSFORMATIONS
+
+=over
+
+=item center_pixel($x,$y)
+
+Centers the given pixel coordinates to the middle of the pixel (mutative).
+
+=item proj2pix_m($x,$y)
+
+Transforms the given projection coordinate to its corresponding pixel coordinate (mutative).
+
+=item proj2pix($x,$y)
+
+Transforms the given projection coordinate, returning its corresponding pixel coordinate as a list.
+
+=item pix2proj_m($x,$y)
+
+Transforms the given pixel coordinate to its corresponding projection coordinate (mutative).
+
+=item pix2proj($x,$y)
+
+Transforms the given pixel coordinate, returning its corresponding projection coordinate as a list.
+
+=back
+
+=head2 PIXEL-TILE TRANSFORMATIONS
+
+=over
+
+=item get_tile_pix($x,$y)
+
+Returns the tile number of the given pixel coordinates (see TIFFComputeTile in libtiff).
+
+=item set_pix_tile($tile,$idx,$x,$y)
+
+Given a tile number and the index into the tile, sets the corresponding pixel coordinates (mutative).
+
+=item get_pix_tile($tile,$idx)
+
+Given a tile number and the index into the tile, returns the corresponding pixel coordinates as a list.
+
+=item get_pix_idx($x,$y)
+
+Given pixel coordinates, returns the index into its tile.
+
+=back
+
+=head2 TILE DATA
+
+=over
+
+=item get_tile($n)
+
+Returns a reference to a flat array containing the data in the nth tile.
+
+=item get_tiles($ul,$br)
+
+Returns a reference to a 3D array (a 2D grid of references to the flat tile arrays) containing the tile data between the upper left ($ul) and lower right ($ur) tiles. 
+
+=item extract_2D_array($x_min,$y_min,$x_max,$y_max,$shape)
+
+Returns a reference to a 2D array of data contained in the pixel boundary ($x_min,$y_min,$x_max,$y_max) and constrained within the Geo::TiledTIFF::Shape $shape. Pass undef as $shape to just get the block of data without constraining to a shape; otherwise data outside of $shape will take the value -1.
+
+Calling this method directly is equivalent to calling the iterator methods below and retrieving the underlying data via buffer() in Geo::TiledTIFF::Iterator.
+
+=back
+
+=head2 ITERATION
+
+=over
+
+=item get_iterator_pix($x_min,$y_min,$x_max,$y_max)
+
+Given a rectangular pixel boundary, returns a C<Geo::TiledTIFF::Iterator> object that can iterate over the pixel values in the given boundary, or undef if the given boundary is completely outside the image. If part of the boundary is outside, only those pixels that are inside the image will be used.
+
+=item get_iterator_shape($shape)
+
+Given a C<Geo::TiledTIFF::Shape> object, returns a C<Geo::TiledTIFF::Iterator> that can iterate over only those pixel values inside the arbitrary shape, or undef if the given shape is completely outside the image.
+
+=back
+
+=head1 SEE ALSO
+
+Geo::TiledTIFF::Shape, Geo::TiledTIFF::Iterator, Geo::Proj4
+
+=head1 CONTACT
+
+    Blake Willmarth
+    blakew@wharton.upenn.edu
+    215-573-7644
+
+=cut
+
+__C__
 
 #include <tiff.h>
 #include <geotiff.h>
 #include <xtiffio.h>
 
 #define DEBUG 0
-#define DUMP 0
 
 typedef struct {
     const char *file;       // Filename
@@ -288,9 +500,7 @@ static void _read_meta(Image* image) {
     image->width = width0;
     TIFFGetField(image->xtif,TIFFTAG_TILEBYTECOUNTS,&tilebyte0);
     TIFFGetField(image->xtif,TIFFTAG_TILEBYTECOUNTS,&tilebyte);
-//    TIFFGetField(image->xtif,TIFFTAG_TILELENGTH,&tile_length0);
     TIFFGetField( image->xtif,TIFFTAG_TILELENGTH,&(image->tile_length) );
-//    TIFFGetField(image->xtif,TIFFTAG_TILEWIDTH,&tile_width0);
     TIFFGetField( image->xtif,TIFFTAG_TILEWIDTH,&(image->tile_width) );
     image->tile_size = TIFFTileSize(image->xtif) * sizeof(char);
     image->tile_step = 
@@ -304,8 +514,6 @@ static void _print_meta(Image* image) {
     printf("Image length x width: %i x %i\n",image->length,image->width);
     printf("Tiles in image: %d\n",TIFFNumberOfTiles(image->xtif));
     printf("Tile length x width: %d x %d\n",image->tile_length,image->tile_width);
-//  printf("Tile byte counts: %d\n",tilebyte0);
-//  printf("Tile byte counts: %d\n",tilebyte);
     printf("Tile row size (bytes): %d\n",TIFFTileRowSize(image->xtif));
     printf("Tile size: %d\n",image->tile_size);
     printf("Tile # at pixel (0,%d): %d\n",image->tile_length,image->tile_step);
@@ -398,7 +606,8 @@ SV* get_tile(SV* obj, int tile) {
 	// Read in char* buffer
 	buffer = newSV(image->tile_size);
 
-    if ( TIFFReadRawTile( image->xtif, tile, (char *)SvPVX(buffer), image->tile_size ) == -1 )
+//    if ( TIFFReadRawTile( image->xtif, tile, (char *)SvPVX(buffer), image->tile_size ) == -1 )
+    if ( TIFFReadEncodedTile( image->xtif, tile, (char *)SvPVX(buffer), image->tile_size ) == -1 )
         croak("Read error on tile.");
 
     // Copy buffer into array
@@ -601,7 +810,7 @@ SV* extract_2D_array(SV* obj, SV* svx_min, SV* svy_min, SV* svx_max, SV* svy_max
     for ( r = 0; r < rows; r++ ) {
         // WITHIN PIXEL ROW
         
-//         - Note: Tiles are flattened 64 x 64 pixel grids
+//         - ex. Tiles are flattened 64 x 64 pixel grids
 //            - index row given by idx / 64
 //            - index col given by idx % 64
         c = 0;          // current buffer column index
@@ -785,192 +994,4 @@ void DESTROY(SV* obj) {
     Safefree(image);
 }
 
-END_OF_C_CODE
 
-1;
-
-#================================================================================================#
-# POD
-
-=head1 NAME
-
-Geo::TiledTIFF - A class representing a tiled GEOTIFF raster image
-
-=head1 SYNOPSIS
-
-    use Geo::TiledTIFF;
-    
-    my $t = Geo::TiledTIFF->new( $image_file );
-    
-    # Dump meta info
-    $t->print_meta;
-    
-    # Convert to pixel coordinates
-    $t->proj2pix_m($lon,$lat);
-    # Compute tile number
-    my $tile = $t->get_tile_pix($lon,$lat);
-    # Get index into the tile
-    my $idx = $t->get_pix_idx($lon,$lat);
-    
-    my ($px,$py);
-    # Get pixel coordinates of 5th pixel in the 2nd tile
-    $t->set_pix_tile( 2, 5, $px, $py );
-    # Get the projected coordinates of the pixel coordinates
-    $t->pix2proj_m($px,$py);
-    
-    # Get an arrayref of tile data (500th tile)
-    my $tile = $t->get_tile(500);
-    # Get a 2x2 3D arrayref of tile data
-    my $tiles = $t->get_tiles(500,500 + $t->tile_step + 1);
-    # 50th pixel value in the upper right tile:    $tiles->[0][1][50]
-    
-    # Get an iterator for a rectangular pixel boundary:
-    my $iter = $t->get_iterator_pix( 
-        $t->get_pix_tile( 500, 0 ),
-        $t->get_pix_tile( 500 + $t->tile_step + 1, $t->tile_length * $t->tile_width - 1 )
-    );
-    # or: Get an iterator for an arbitrary shape
-    my $iter = $t->get_iterator_shape( $shape );
-    # Count the occurance of each pixel value
-    my %c;
-    $c{$v}++ while ( defined( my $v = $iter->next ) );
-    
-=head1 DESCRIPTION
-
-Geo::TiledTIFF provides an interface to libtiff and libgeotiff for raster data stored in tiled TIFF format conforming to the GeoTIFF specification. Several additional functions are provided for ease of access to the underlying geodata.
-
-This library is only meant to process tiled .tif images, and in fact will fail during construction if the image isn't tiled. To create a tiled TIFF from a non-tiled TIFF, see the command-line utility tifcp. Arbitrary raster data can be exported to the tiled TIFF format with GIS software, such as ArcGIS.
-
-=head1 METHODS
-
-=head2 CONSTRUCTOR
-
-=over
-
-=head3 new($tiff_filepath)
-
-Returns a new Geo::TiledTIFF instance corresponding to the given TIFF filepath. 
-
-An exception will be thrown if the filepath is invalid, if the image isn't tiled, if the bits per sample isn't 8, or if the samples per pixel isn't 1.
-
-=back
-
-=head2 IMAGE METADATA
-
-=over
-
-=head3 $t->file
-
-The filepath of the TIFF image.
-
-=head3 $t->length
-
-The length (height) of the image in pixels.
-
-=head3 $t->width
-
-The width of the image in pixels.
-
-=head3 $t->tile_length
-
-The length (height) of a single tile in pixels.
-
-=head3 $t->tile_width
-
-The width of a single tile in pixels.
-
-=head3 $t->tile_size
-
-The total size (in bytes) of a tile of pixels (= tile_width * tile_length if bps = 1).
-
-=head3 $t->tile_step
-
-The number of tiles in a row of the image.
-
-=head3 $t->dump_tile($tile)
-
-Pretty-prints the given tile.
-
-=back
-
-=head2 PIXEL-PROJECTION TRANSFORMATIONS
-
-=over
-
-=head3 $t->center_pixel($x,$y)
-
-Centers the given pixel coordinates to the middle of the pixel (mutative).
-
-=head3 $t->proj2pix_boundary_m($x_min,$y_min,$x_max,$y_max)
-
-Transforms the given projection rectangular boundary to its corresponding pixel boundary (mutative).
-
-=head3 $t->proj2pix_boundary($x_min,$y_min,$x_max,$y_max)
-
-Transforms the given projection rectangular boundary, returning its corresponding pixel boundary as a list.
-
-=head3 $t->proj2pix_m($x,$y)
-
-Transforms the given projection coordinate to its corresponding pixel coordinate (mutative).
-
-=head3 $t->proj2pix($x,$y)
-
-Transforms the given projection coordinate, returning its corresponding pixel coordinate as a list.
-
-=head3 $t->pix2proj_m($x,$y)
-
-Transforms the given pixel coordinate to its corresponding projection coordinate (mutative).
-
-=head3 $t->pix2proj($x,$y)
-
-Transforms the given pixel coordinate, returning its corresponding projection coordinate as a list.
-
-=back
-
-=head2 PIXEL-TILE TRANSFORMATIONS
-
-=over
-
-=head3 $t->get_tile_pix($x,$y)
-
-Returns the tile number of the given pixel coordinates.
-
-=head3 $t->set_pix_tile($tile,$idx,$x,$y)
-
-Given a tile number and the index into the tile, sets the corresponding pixel coordinates (mutative).
-
-=head3 $t->get_pix_tile($tile,$idx)
-
-Given a tile number and the index into the tile, returns the corresponding pixel coordinates as a list.
-
-=head3 $t->get_pix_idx($x,$y)
-
-Given pixel coordinates, returns the index into its tile.
-
-=back
-
-=head2 ITERATION
-
-=over
-
-=head3 $t->get_iterator_pix($x_min,$y_min,$x_max,$y_max)
-
-Given a rectangular pixel boundary, returns a C<Geo::TiledTIFF::Iterator> object that can iterate over the pixel values in the given boundary, or undef if the given boundary is completely outside the image. If part of the boundary is outside, only those pixels that are inside the image will be used.
-
-=head3 $t->get_iterator_shape($shape)
-
-Given a C<Geo::TiledTIFF::Shape> object, returns a C<Geo::TiledTIFF::Iterator> that can iterate over only those pixel values inside the arbitrary shape, or undef if the given shape is completely outside the image.
-
-=back
-
-=head1 SEE ALSO
-
-Geo::TiledTIFF::Shape, Geo::TiledTIFF::Iterator, Geo::Proj4
-
-=head1 CONTACT
-
-    Blake Willmarth
-    blakew@wharton.upenn.edu
-    215-573-7644
-
-=cut

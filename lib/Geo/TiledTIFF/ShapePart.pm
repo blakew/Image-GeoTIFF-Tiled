@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 
 use vars qw/ $VERSION /;
-$VERSION = '00.00.1';
+$VERSION = '0.01';
 
 # Parts are lines (start != end) or horizontal vertexes (start = end)
 
@@ -149,7 +149,7 @@ Whenever the start or end points are set, the linear interpolation along integer
 
 =over
 
-=head3 new( $start, $end )
+=item new($start,$end)
 
 Starting and ending points are required during construction. As always, points are 2D array references [ $x, $y ].
 
@@ -159,33 +159,33 @@ Starting and ending points are required during construction. As always, points a
 
 =over
 
-=head3 start()
+=item start
 
 Returns, optionally sets, the starting point. Setting causes the intermediate points between the ending point to be re-interpolated and therefore shouldn't be done.
 
-=head3 end()
+=item end
 
 Returns, optionally sets, the ending point. Setting causes the intermediate points between the starting point to be re-interpolated and therefore shouldn't be done.
 
-=head3 upper()
+=item upper
 
 Returns the start or end point, whichever has the lower latitude.
 
-=head3 lower()
+=item lower
 
 Returns the start or end point, whichever has the higher latitude.
 
 =back
 
-=head1 GET POINTS
+=head2 GET POINTS
 
 =over
 
-=head2 get_point($y)
+=item get_point($y)
 
 Returns the [ $x, $y ] interpolated point located at (integer) pixel latitude $y, or C<undef> if there's no point along the given $y.
 
-=head2 get_x($y)
+=item get_x($y)
 
 Returns just the $x value of C<get_point>, or C<undef> if there's no point along the given $y.
 

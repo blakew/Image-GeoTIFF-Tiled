@@ -3,17 +3,12 @@ use strict;
 use warnings;
 use Carp;
 use List::MoreUtils qw(minmax);
-use Module::Load;
+use Module::Load 0.12;
 
 use Geo::TiledTIFF;
 use Geo::TiledTIFF::ShapePart;
-#use Geo::Projection;
-#use Geo::Proj4;
-#use Geo::ShapeFile;
 
 # Needs to be a series of ordered pixel points
-
-# Repeat: EVERY POINT MUST BE IN PIXELS!!
 
 # Data structure: 2D array - one row per pixel row
 #   - first row ($data->[0]) is at pixel latitude y_min
@@ -21,7 +16,7 @@ use Geo::TiledTIFF::ShapePart;
 #   - rows should be ordered on longitude (x) (specific method call when using main method)
 
 use vars qw/ $VERSION /;
-$VERSION = '00.00.1';
+$VERSION = '0.01';
 
 #================================================================================================#
 
@@ -54,10 +49,12 @@ sub load_shape {
     my ($class,$tiff,$proj,$shape) = @_;
     croak "loading shapes must be done by the class." if ref $class;
 #    croak "Geo::Projection required." unless defined $proj and ref $proj and $proj->isa("Geo::Projection");
-    croak "Geo::Proj4 required." unless defined $proj and ref $proj and $proj->isa("Geo::Proj4");
     croak "Geo::TiledTIFF required." unless defined $tiff and ref $tiff and $tiff->isa("Geo::TiledTIFF");
+    if ( defined $proj ) {
+        croak "Geo::Proj4 required." unless ref $proj and $proj->isa("Geo::Proj4");
+        load 'Geo::Proj4';
+    } 
     my $self;
-    load 'Geo::Proj4';
     if ( ref $shape and $shape->isa('Geo::ShapeFile::Shape') ) {
         load 'Geo::ShapeFile';  # run-time loading
         my $boundary = [ 
@@ -67,15 +64,19 @@ sub load_shape {
             $shape->y_max
         ];
 #        $proj->project_boundary_m(@$boundary);
-        Geo::TiledTIFF::Shape->project_boundary($proj,$boundary);
+        Geo::TiledTIFF::Shape->project_boundary($proj,$boundary)
+                if defined $proj;
         $self = Geo::TiledTIFF::Shape->new(
             [ $tiff->proj2pix_boundary(@$boundary) ]
         );
         for my $i ( 1..$shape->num_parts ) {
             for ( $shape->get_part($i) ) {
 #                my ($x,$y) = $tiff->proj2pix($proj->project($_->X,$_->Y));
-                my ($x,$y) = $tiff->proj2pix($proj->forward($_->Y,$_->X));
-                $self->add_point($x,$y);
+                my ($x,$y) = 
+                        defined $proj 
+                            ? ($proj->forward($_->Y,$_->X))
+                            : ($_->X,$_->Y); 
+                $self->add_point($tiff->proj2pix($x,$y));
             }
         }
     }
@@ -281,9 +282,9 @@ Without exception, all coordinates must be in pixels.
 
 =over
 
-=head3 new( \%boundary )
+=item new( \%boundary )
 
-=head3 new( \@boundary )
+=item new( \@boundary )
 
 where %boundary has the x_min, y_min, x_max, and y_max keys filled or @boundary has them in that order. Pixel coordinates required. Without defining a boundary the constructor throws an exception.
 
@@ -293,11 +294,11 @@ where %boundary has the x_min, y_min, x_max, and y_max keys filled or @boundary 
 
 =over
 
-=head3 load_shape( $tiff, $proj, $shape )
+=item load_shape( $tiff, $proj, $shape )
 
-Loads a pre-defined shape object defined by an external class. Currently only loads L<Geo::ShapeFile::Shape> objects. Requires a pre-instantiated C<Geo::TiledTIFF> and C<Geo::Proj4> object to translate cartesian coordinates to pixels.
+Loads a pre-defined shape object defined by an external class. Currently only loads L<Geo::ShapeFile::Shape> objects. 
 
-Geo::Proj4 and Geo::TiledTIFF objects must be pre-loaded into the class before calling this method.
+Geo::Proj4 and Geo::TiledTIFF objects must be pre-loaded into the class before calling this method, unless the shape is already projected, in which case pass undef as the $proj parameter.
 
 =back
 
@@ -305,31 +306,31 @@ Geo::Proj4 and Geo::TiledTIFF objects must be pre-loaded into the class before c
 
 =over
 
-=head3 x_min() x_max() y_min() y_max()
+=item x_min x_max y_min y_max
 
 Retrieves the boundary values.
 
-=head3 boundary()
+=item boundary
 
 Equivalent to (C<$shape-&gt;x_min>, C<$shape-&gt;y_min>, C<$shape-&gt;x_max>, C<$shape-&gt;y_max>).
 
-=head3 corners()
+=item corners
 
 Returns a list of four two-element arrayref's containing the upper left, lower left, upper right, and lower right corner coordinates, in that order.
 
-=head3 num_parts()
+=item num_parts
 
 Returns the number of Geo::TiledTIFF::ShapePart's in this shape.
 
-=head3 get_part( $i )
+=item get_part($i)
 
 Returns the ith Geo::TiledTIFF::ShapePart in this shape.
 
-=head3 as_array()
+=item as_array
 
 Returns a 2D array reference of [ start, end ] points corresponding to each part of the shape.
 
-=head3 add_point($x,$y)
+=item add_point($x,$y)
 
 Adds the ($x,$y) point to this shape. Only used for making custom shapes.
 
@@ -339,13 +340,11 @@ Adds the ($x,$y) point to this shape. Only used for making custom shapes.
 
 =over
 
-=head3 get_x($y)
+=item get_x($y)
 
 Returns a reference to a sorted array containing all x-pixel values along the integer y latitude. This method is used to determine if a given pixel lies inside the shape by implementing a ray-casting algorithm using a state machine (either OUTSIDE or INSIDE).
 
 Repeated values indicate a local horizontal vertex.
-
-=back
 
 =back
 
