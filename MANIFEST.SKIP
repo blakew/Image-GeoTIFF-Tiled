@@ -1,0 +1,16 @@
+# Makemaker generated files and dirs.
+^MANIFEST\.
+^Makefile$
+^blib/
+^MakeMaker-\d
+
+# Hidden files
+^\.
+
+# Temp, old and backup files.
+~$
+\.swp$
+
+# _Inline directory
+_Inline/.*$
+

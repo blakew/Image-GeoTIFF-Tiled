@@ -5,8 +5,18 @@ lib/Geo/TiledTIFF/Image.pm
 lib/Geo/TiledTIFF/Iterator.pm
 lib/Geo/TiledTIFF/Shape.pm
 lib/Geo/TiledTIFF/ShapePart.pm
+lib/t/00-load.t
+lib/t/01-samples-open.t
+lib/t/02-samples-meta.t
+lib/t/03-samples-pixel-proj.t
+lib/t/04-samples-pixel-tile.t
+lib/t/05-samples-tile-data.t
+lib/t/06-samples-iter.t
+lib/t/07-samples-iter-shp.t
+lib/t/pod-coverage.t
+lib/t/pod.t
 Makefile.PL
-MANIFEST			This list of files
+MANIFEST
 README
 t/00-load.t
 t/01-samples-open.t
@@ -21,6 +31,11 @@ t/09-samples-iter-shp-usgs1_wacky.t
 t/10-samples-iter-shp-usgs2_circle.t
 t/pod-coverage.t
 t/pod.t
+t/samples/lg_usgs1.txt
+t/samples/lg_usgs2.txt
+t/samples/poly.txt
+t/samples/ti_usgs1.txt
+t/samples/ti_usgs2.txt
 t/samples/usgs1.tif
 t/samples/usgs1_poly.dbf
 t/samples/usgs1_poly.prj
@@ -42,4 +57,5 @@ t/samples/usgs2_rect.dbf
 t/samples/usgs2_rect.prj
 t/samples/usgs2_rect.shp
 t/samples/usgs2_rect.shx
+t/samples/wacky.txt
 t/test_contains.pl
