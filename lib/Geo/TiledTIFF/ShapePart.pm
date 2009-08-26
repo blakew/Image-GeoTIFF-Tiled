@@ -175,6 +175,10 @@ Returns the start or end point, whichever has the lower latitude.
 
 Returns the start or end point, whichever has the higher latitude.
 
+=item str
+
+Returns a string representation of the object (debugging only).
+
 =back
 
 =head2 GET POINTS

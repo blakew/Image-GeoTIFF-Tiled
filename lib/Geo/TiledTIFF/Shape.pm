@@ -302,7 +302,7 @@ Geo::Proj4 and Geo::TiledTIFF objects must be pre-loaded into the class before c
 
 =back
 
-=head2 ACCESSORS
+=head2 METHODS
 
 =over
 
@@ -334,11 +334,9 @@ Returns a 2D array reference of [ start, end ] points corresponding to each part
 
 Adds the ($x,$y) point to this shape. Only used for making custom shapes.
 
-=back
+=item project_boundary($proj,$b)
 
-=head2 GET_X
-
-=over
+Class method. Returns the projected boundary using projection (Geo::Proj4) $proj and boundary $b, a 4-element array ref with x_min, y_min, x_max, y_max as values.
 
 =item get_x($y)
 

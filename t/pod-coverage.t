@@ -15,4 +15,10 @@ eval "use Pod::Coverage $min_pc";
 plan skip_all => "Pod::Coverage $min_pc required for testing POD coverage"
     if $@;
 
-all_pod_coverage_ok();
+#all_pod_coverage_ok();
+
+plan tests => 4;
+pod_coverage_ok( 'Geo::TiledTIFF' );
+pod_coverage_ok( 'Geo::TiledTIFF::Iterator', { also_private => [ 'new' ] } );
+pod_coverage_ok( 'Geo::TiledTIFF::Shape' );
+pod_coverage_ok( 'Geo::TiledTIFF::ShapePart' );
