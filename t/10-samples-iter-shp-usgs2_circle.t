@@ -1,14 +1,15 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Data::Dumper;
-use File::Basename qw(basename);
-use Test::More qw(no_plan); 
+#use Data::Dumper;
+use Test::More tests => 9168;
 
 eval { require Geo::ShapeFile; };
 if($@) { print "1..1\nok 1\n"; warn "skipping, Geo::ShapeFile not available\n"; exit } 
 
-use lib '../lib';
+require './t/test_contains.pl';     # Loads test_contains method
+
+use lib 'lib';
 use Geo::TiledTIFF;
 
 # Circle in usgs2.tif
@@ -17,9 +18,11 @@ use Geo::TiledTIFF;
 
 my $image = Geo::TiledTIFF->new( "./t/samples/usgs2.tif" );
 my $shp = Geo::ShapeFile->new('./t/samples/usgs2_circle');
+my $shp_shape = $shp->get_shp_record(1);
 my $shape = 
-    Geo::TiledTIFF::Shape->load_shape($image,undef,$shp->get_shp_record(1));
+    Geo::TiledTIFF::Shape->load_shape($image,undef,$shp_shape);
 my $iter = $image->get_iterator_shape($shape);
+test_contains($iter,$shp_shape);
 my $row = -1;               # Incremented, from 0
 my $col = $iter->cols / 2;  # Start from the middle
 my $top = 1;                # Top of the circle flag
