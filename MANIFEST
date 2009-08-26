@@ -38,8 +38,4 @@ t/samples/usgs2_circle.dbf
 t/samples/usgs2_circle.prj
 t/samples/usgs2_circle.shp
 t/samples/usgs2_circle.shx
-t/samples/usgs2_rect.dbf
-t/samples/usgs2_rect.prj
-t/samples/usgs2_rect.shp
-t/samples/usgs2_rect.shx
 t/test_contains.pl
