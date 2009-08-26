@@ -76,7 +76,7 @@ sub get_iterator_shape {
 sub get_iterator_pix {
     my ($self,@px_bound) = @_;
     unless ( $self->_constrain_boundary(\@px_bound) ) {
-        carp "Boundary outside of image";
+#        carp "Boundary outside of image";
         return;
     }
     my $data = $self->extract_2D_array(@px_bound,undef);

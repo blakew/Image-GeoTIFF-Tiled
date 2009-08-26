@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use lib '../lib';
 #use Data::Dumper;
-use Test::More qw/ no_plan /;
+use Test::More tests => 51;
 use Geo::TiledTIFF::ShapePart;
 
 #BEGIN {

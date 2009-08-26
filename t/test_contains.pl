@@ -27,8 +27,8 @@ sub test_contains {
         $total++;
     }
     $success = ($total - $fail) / $total;
-    ok( $success >= 0.99, "Geo::ShapeFile::Shape contains agrees with iterator
-        ($success success rate)" );
+    ok( $success >= 0.99, "Geo::ShapeFile::Shape contains agrees with iterator (" .
+            sprintf("%.3f%%",$success * 100) . " success rate)" );
 
     # Reverse the buffer values and test the -1 values are in fact outside the shape
     my @old_buffer = @{$iter->buffer};
@@ -56,8 +56,8 @@ sub test_contains {
         $total++;
     }
     $success = ($total - $fail) / $total;
-    ok( $success >= 0.99, "Geo::ShapeFile::Shape DOESN'T contains agrees with iterator
-        ($success success rate)" );
+    ok( $success >= 0.99, "Geo::ShapeFile::Shape contains agrees with iterator (" .
+            sprintf("%.3f%%",$success * 100) . " success rate)" );
 
     $iter->_reset;
     $iter->{buffer} = \@old_buffer;
