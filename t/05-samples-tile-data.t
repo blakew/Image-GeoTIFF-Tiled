@@ -28,10 +28,5 @@ for my $tiff (<./samples/usgs*.tif>) {
     );
     $tile = $image->get_tiles($ul,$br);
     is_deeply( $tile, \@tiles, '3D Tile data' );
-#    for ($ul,$ur,$bl,$br) {
-#        print "\nTile $_:\n";
-#        $image->dump_tile($_);
-#    }
-
 }
 

@@ -20,3 +20,6 @@
 # Ignore _Inline directory
 _Inline/
 
+# Ignore author tests
+#auth-*.t
+

@@ -1,10 +1,11 @@
 #!/usr/bin/perl
 
+use lib '../lib';
 use Test::More tests => 6;
 
 BEGIN {
-    use_ok( 'Geo::TiledTIFF::ShapePart' );
     use_ok( 'Module::Load' );
+    use_ok( 'Geo::TiledTIFF::ShapePart' );
     use_ok( 'Geo::TiledTIFF::Shape' );
     use_ok( 'Geo::TiledTIFF::Iterator' );
 	use_ok( 'Geo::TiledTIFF::Image' );

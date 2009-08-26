@@ -2,15 +2,15 @@ package Geo::TiledTIFF;
 use strict;
 use warnings;
 use Carp;
-use Geo::TiledTIFF::Image;
+#use Geo::TiledTIFF::Image;
 use Geo::TiledTIFF::Iterator;
 use Geo::TiledTIFF::Shape;
 
 use vars qw( $VERSION @ISA );
 $VERSION = '0.01';
 
-#use base 'Geo::TiledTIFF::Image';
-push @ISA, 'Geo::TiledTIFF::Image';
+use base 'Geo::TiledTIFF::Image';
+#push @ISA, 'Geo::TiledTIFF::Image';
 
 #sub new {
 #    my ($class,$file) = @_;

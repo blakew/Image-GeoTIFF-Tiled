@@ -1,6 +1,5 @@
 package Geo::TiledTIFF::Image;
 use strict;
-use warnings;
 use Carp;
 use Geo::TiledTIFF::Shape;
 
