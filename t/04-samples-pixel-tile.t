@@ -7,7 +7,7 @@ use Geo::TiledTIFF;
 
 # Test tile, index functions
 
-for my $tiff (<./samples/usgs*.tif>) {
+for my $tiff (<./t/samples/usgs*.tif>) {
     my $image = Geo::TiledTIFF->new($tiff);
     my $tw = $image->tile_width;
     my $tl = $image->tile_length;

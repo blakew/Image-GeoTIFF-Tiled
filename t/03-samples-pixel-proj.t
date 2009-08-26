@@ -8,14 +8,14 @@ use Geo::TiledTIFF;
 # Test projected <-> pixel translations
 my $exp = {
     # Found using listgeo utility
-    './samples/usgs1.tif' => {
+    './t/samples/usgs1.tif' => {
         upper_left => [ '730232.510', 4557035.327 ],
         lower_left => [ '730232.510', 4540490.783 ],
         upper_right => [ 742478.155, 4557035.327 ],
         lower_right => [ 742478.155, 4540490.783 ],
         center => [ 736355.333, 4548763.055 ]
     },
-    './samples/usgs2.tif' => {
+    './t/samples/usgs2.tif' => {
         upper_left => [ 698753.305, 4556059.506 ],
         lower_left => [ 698753.305, 4539568.607 ],
         upper_right => [ 710925.798, 4556059.506 ],
@@ -24,7 +24,7 @@ my $exp = {
     },
 };
 
-for my $tiff (<./samples/usgs*.tif>) {
+for my $tiff (<./t/samples/usgs*.tif>) {
     my $image = Geo::TiledTIFF->new($tiff);
     my $w = $image->width;
     my $l = $image->length;

@@ -188,6 +188,5 @@ Geo::TiledTIFF::Shape, Geo::TiledTIFF::Iterator, Geo::Proj4
 =head1 CONTACT
 
     Blake Willmarth
-    blakew@wharton.upenn.edu
-    215-573-7644
+    bwillmarth@gmail.com
 

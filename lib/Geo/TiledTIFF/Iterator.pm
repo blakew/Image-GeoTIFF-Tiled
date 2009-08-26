@@ -239,7 +239,6 @@ Blake Willmarth
 =head1 CONTACT
 
     Blake Willmarth
-    blakew@wharton.upenn.edu
-    215-573-7644
+    bwillmarth@gmail.com
 
 =cut

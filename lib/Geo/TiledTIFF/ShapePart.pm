@@ -198,8 +198,7 @@ Returns just the $x value of C<get_point>, or C<undef> if there's no point along
 =head1 CONTACT
 
     Blake Willmarth
-    blakew@wharton.upenn.edu
-    215-573-7644
+    bwillmarth@gmail.com
 
 =cut
 
