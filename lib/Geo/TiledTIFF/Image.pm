@@ -15,7 +15,7 @@ use Inline C => Config =>
             ;
 
 use Inline C => 'DATA',
-#    VERSION => '0.01',
+    VERSION => '0.01',
     NAME => 'Geo::TiledTIFF::Image';
 
 1;
