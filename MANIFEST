@@ -15,10 +15,11 @@ t/03-samples-pixel-proj.t
 t/04-samples-pixel-tile.t
 t/05-samples-tile-data.t
 t/06-ShapePart.t
-t/07-samples-iter.t
-t/08-samples-iter-shp-usgs1_poly.t
-t/09-samples-iter-shp-usgs1_wacky.t
-t/10-samples-iter-shp-usgs2_circle.t
+t/07-Shape.t
+t/08-samples-iter.t
+t/09-samples-iter-shp-usgs1_poly.t
+t/10-samples-iter-shp-usgs1_wacky.t
+t/11-samples-iter-shp-usgs2_circle.t
 t/pod-coverage.t
 t/pod.t
 t/samples/usgs1.tif
