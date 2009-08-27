@@ -1,8 +1,6 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use lib 'lib';
-#use Data::Dumper;
 use Test::More tests => 33;
 use Geo::TiledTIFF;
 #use Geo::TiledTIFF::Shape;

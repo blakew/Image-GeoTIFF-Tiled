@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use Data::Dumper;
 use Test::More tests => 2; 
 
 eval { require Geo::ShapeFile; };
@@ -10,7 +9,6 @@ eval { require Geo::Proj4; };
 if($@) { print "1..1\nok 1\n"; warn "skipping, Geo::Proj4 not available\n"; exit } 
 
 require './t/test_contains.pl';     # Loads test_contains method
-use lib 'lib';
 use Geo::TiledTIFF;
 
 #  Polygon in usgs1.tif that needs to be projected

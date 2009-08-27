@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 use Test::More tests => 20; 
-use lib '../lib';
 use Geo::TiledTIFF;
 
 # Test projected <-> pixel translations

@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 use Test::More tests => 44; 
-use lib 'lib';
 use Geo::TiledTIFF;
 
 for my $tiff (<./t/samples/usgs*.tif>) {

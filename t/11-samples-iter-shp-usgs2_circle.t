@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-#use Data::Dumper;
 use Test::More tests => 9168;
 
 eval { require Geo::ShapeFile; };
@@ -9,7 +8,6 @@ if($@) { print "1..1\nok 1\n"; warn "skipping, Geo::ShapeFile not available\n"; 
 
 require './t/test_contains.pl';     # Loads test_contains method
 
-use lib 'lib';
 use Geo::TiledTIFF;
 
 # Circle in usgs2.tif

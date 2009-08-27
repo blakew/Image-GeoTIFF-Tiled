@@ -6,7 +6,6 @@ use Test::More tests => 14;
 eval { require Image::ExifTool; };
 if($@) { print "1..1\nok 1\n"; warn "skipping, Image::ExifTool not available\n"; exit } 
 
-use lib '../lib';
 use Geo::TiledTIFF;
 
 for my $tiff (<./t/samples/usgs*.tif>) {

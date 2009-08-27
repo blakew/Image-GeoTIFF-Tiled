@@ -1,14 +1,8 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-use lib '../lib';
-#use Data::Dumper;
 use Test::More tests => 51;
 use Geo::TiledTIFF::ShapePart;
-
-#BEGIN {
-#    use_ok( q{Geo::TiledTIFF::ShapePart} );
-#}
 
 my @fail = (
     1,
