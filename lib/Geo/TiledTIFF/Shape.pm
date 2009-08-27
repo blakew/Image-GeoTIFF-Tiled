@@ -350,10 +350,22 @@ Repeated values indicate a local horizontal vertex.
 
 Geo::Proj4, Geo::TiledTIFF, Geo::TiledTIFF::Iterator, Geo::TiledTIFF::ShapePart, L<Geo::ShapeFile>
 
-=head1 CONTACT
+=head1 COPYRIGHT & LICENSE
 
-    Blake Willmarth
-    bwillmarth@gmail.com
+Copyright 2009 Blake Willmarth.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of either:
+
+=over 4
+
+=item * the GNU General Public License as published by the Free
+Software Foundation; either version 1, or (at your option) any
+later version, or
+
+=item * the Artistic License version 2.0.
+
+=back
 
 =cut
 
