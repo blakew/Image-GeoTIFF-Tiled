@@ -3,6 +3,7 @@
 ^Makefile$
 ^blib/
 ^MakeMaker-\d
+\.tar\.gz$
 
 # Hidden files
 ^\.
@@ -14,3 +15,5 @@
 # _Inline directory
 _Inline/.*$
 
+# Load test (run-time BEGIN loading bad when installing)
+00-load\.t$

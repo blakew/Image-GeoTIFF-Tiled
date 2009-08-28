@@ -26,6 +26,8 @@ my $iter = $image->get_iterator_shape($shape);
 
 #$iter->dump_buffer;
 
-warn "Known diagreement with Geo::ShapeFile::Shape->contains_point at
-(-78.2019736193844,41.05929317151) - manually checked, that point lies in the shape";
+# Known diagreement with Geo::ShapeFile::Shape->contains_point at
+# (-78.2019736193844,41.05929317151) - manually checked, that point lies in the shape
+$SIG{__WARN__} = sub { warn @_ unless $_[0] =~ /-78.2019736193844,41.05929317151/ };
 test_contains($iter,$shp_shape,$proj);
+

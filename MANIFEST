@@ -7,7 +7,6 @@ lib/Geo/TiledTIFF/ShapePart.pm
 Makefile.PL
 MANIFEST			This list of files
 README
-t/00-load.t
 t/01-samples-open.t
 t/02-samples-meta.t
 t/03-samples-pixel-proj.t
@@ -39,3 +38,4 @@ t/samples/usgs2_circle.prj
 t/samples/usgs2_circle.shp
 t/samples/usgs2_circle.shx
 t/test_contains.pl
+TiledTIFF.pm

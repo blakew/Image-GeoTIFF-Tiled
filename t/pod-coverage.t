@@ -17,6 +17,10 @@ plan skip_all => "Pod::Coverage $min_pc required for testing POD coverage"
 
 #all_pod_coverage_ok();
 
+$SIG{__WARN__} = sub { 
+    warn @_ unless $_[0] =~ /One or more DATA sections were not processed by Inline/ 
+};
+
 plan tests => 4;
 pod_coverage_ok( 'Geo::TiledTIFF' );
 pod_coverage_ok( 'Geo::TiledTIFF::Iterator' );

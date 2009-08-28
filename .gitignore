@@ -24,3 +24,7 @@ _Inline/
 # Ignore author tests
 #auth-*.t
 
+# MakeMaker files
+Makefile
+blib/
+
