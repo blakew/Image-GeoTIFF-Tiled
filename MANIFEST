@@ -1,5 +1,4 @@
 Changes
-lib/Geo/TiledTIFF.pm
 lib/Geo/TiledTIFF.pod
 lib/Geo/TiledTIFF/Iterator.pm
 lib/Geo/TiledTIFF/Shape.pm

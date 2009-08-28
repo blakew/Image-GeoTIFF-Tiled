@@ -32,8 +32,10 @@ Geo::TiledTIFF - A Perl interface to libgeotiff for tiled TIFF images, with supp
     
     # Get an iterator for a rectangular pixel boundary:
     my $iter = $t->get_iterator_pix( 
-        $t->get_pix_tile( 500, 0 ),
+        $t->get_pix_tile( 500, 0 ),     
+            # upper left coordinate (x_min,y_min)
         $t->get_pix_tile( 500 + $t->tile_step + 1, $t->tile_length * $t->tile_width - 1 )
+            # bottom right coordinate (x_max,y_max)
     );
     # or: Get an iterator for an arbitrary shape
     my $iter = $t->get_iterator_shape( $shape );
@@ -45,7 +47,7 @@ Geo::TiledTIFF - A Perl interface to libgeotiff for tiled TIFF images, with supp
 
 Geo::TiledTIFF provides an interface to libtiff and libgeotiff for raster data stored in tiled TIFF format conforming to the GeoTIFF specification. Several additional functions are provided for ease of access to the underlying geodata.
 
-This library is only meant to process tiled .tif images, and in fact will fail during construction if the image isn't tiled. To create a tiled TIFF from a non-tiled TIFF, see the command-line utility tifcp. Arbitrary raster data can be exported to the tiled TIFF format with GIS software, such as ArcGIS.
+This library is only meant to process tiled GeoTIFF images, and in fact will fail during construction if the image isn't tiled. To create a tiled GeoTIFF from a non-tiled GeoTIFF, see the command-line utility gtifcp. Arbitrary raster data can be exported to the tiled GeoTIFF format with GIS software.
 
 =head1 METHODS
 

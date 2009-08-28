@@ -17,3 +17,7 @@ _Inline/.*$
 
 # Load test (run-time BEGIN loading bad when installing)
 00-load\.t$
+
+# WEIRD Inline condition - move TiledTIFF.pm to root directory
+lib/Geo/TiledTIFF.pm
+
