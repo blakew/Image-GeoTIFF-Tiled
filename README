@@ -1,5 +1,5 @@
-Geo-TiledTIFF version 0.01
-==========================
+Image-GeoTIFF-Tiled version 0.01
+======================================
 
 A Perl interface to libgeotiff for tiled geoTIFF images, with support 
 for extracting and iterating arbitrary shapes.

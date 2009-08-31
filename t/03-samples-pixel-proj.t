@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::More tests => 20; 
-use Geo::TiledTIFF;
+use Image::GeoTIFF::Tiled;
 
 # Test projected <-> pixel translations
 my $exp = {
@@ -24,7 +24,7 @@ my $exp = {
 };
 
 for my $tiff (<./t/samples/usgs*.tif>) {
-    my $image = Geo::TiledTIFF->new($tiff);
+    my $image = Image::GeoTIFF::Tiled->new($tiff);
     my $w = $image->width;
     my $l = $image->length;
     my %lookup = (

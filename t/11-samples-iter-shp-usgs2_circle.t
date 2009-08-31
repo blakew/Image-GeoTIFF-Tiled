@@ -8,17 +8,17 @@ if($@) { print "1..1\nok 1\n"; warn "skipping, Geo::ShapeFile not available\n"; 
 
 require './t/test_contains.pl';     # Loads test_contains method
 
-use Geo::TiledTIFF;
+use Image::GeoTIFF::Tiled;
 
 # Circle in usgs2.tif
 #   - surrounds an ovular topographic level ("ring")
 #   - values: background = 5, ring = 4
 
-my $image = Geo::TiledTIFF->new( "./t/samples/usgs2.tif" );
+my $image = Image::GeoTIFF::Tiled->new( "./t/samples/usgs2.tif" );
 my $shp = Geo::ShapeFile->new('./t/samples/usgs2_circle');
 my $shp_shape = $shp->get_shp_record(1);
 my $shape = 
-    Geo::TiledTIFF::Shape->load_shape($image,undef,$shp_shape);
+    Image::GeoTIFF::Tiled::Shape->load_shape($image,undef,$shp_shape);
 my $iter = $image->get_iterator_shape($shape);
 test_contains($iter,$shp_shape);
 my $row = -1;               # Incremented, from 0

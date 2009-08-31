@@ -22,7 +22,7 @@ $SIG{__WARN__} = sub {
 };
 
 plan tests => 4;
-pod_coverage_ok( 'Geo::TiledTIFF' );
-pod_coverage_ok( 'Geo::TiledTIFF::Iterator' );
-pod_coverage_ok( 'Geo::TiledTIFF::Shape' );
-pod_coverage_ok( 'Geo::TiledTIFF::ShapePart' );
+pod_coverage_ok( 'Image::GeoTIFF::Tiled' );
+pod_coverage_ok( 'Image::GeoTIFF::Tiled::Iterator' );
+pod_coverage_ok( 'Image::GeoTIFF::Tiled::Shape' );
+pod_coverage_ok( 'Image::GeoTIFF::Tiled::ShapePart' );

@@ -2,12 +2,12 @@
 use strict;
 use warnings;
 use Test::More tests => 120; 
-use Geo::TiledTIFF;
+use Image::GeoTIFF::Tiled;
 
 # Test tile, index functions
 
 for my $tiff (<./t/samples/usgs*.tif>) {
-    my $image = Geo::TiledTIFF->new($tiff);
+    my $image = Image::GeoTIFF::Tiled->new($tiff);
     my $tw = $image->tile_width;
     my $tl = $image->tile_length;
 

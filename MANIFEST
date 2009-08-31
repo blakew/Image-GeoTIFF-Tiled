@@ -1,8 +1,9 @@
 Changes
-lib/Geo/TiledTIFF.pod
-lib/Geo/TiledTIFF/Iterator.pm
-lib/Geo/TiledTIFF/Shape.pm
-lib/Geo/TiledTIFF/ShapePart.pm
+lib/Image/GeoTIFF/Tiled.pm
+lib/Image/GeoTIFF/Tiled.pod
+lib/Image/GeoTIFF/Tiled/Iterator.pm
+lib/Image/GeoTIFF/Tiled/Shape.pm
+lib/Image/GeoTIFF/Tiled/ShapePart.pm
 Makefile.PL
 MANIFEST			This list of files
 README
@@ -37,4 +38,4 @@ t/samples/usgs2_circle.prj
 t/samples/usgs2_circle.shp
 t/samples/usgs2_circle.shx
 t/test_contains.pl
-TiledTIFF.pm
+Tiled.pm

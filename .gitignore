@@ -18,7 +18,7 @@
 *.swp
 *.bak
 
-# Ignore _Inline directory
+# Ignore _Inline directory and files
 _Inline/
 
 # Ignore author tests
@@ -27,4 +27,6 @@ _Inline/
 # MakeMaker files
 Makefile
 blib/
+*.inl
+pm_to_blib
 

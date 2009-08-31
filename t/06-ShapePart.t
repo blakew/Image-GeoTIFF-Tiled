@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 use Test::More tests => 51;
-use Geo::TiledTIFF::ShapePart;
+use Image::GeoTIFF::Tiled::ShapePart;
 
 my @fail = (
     1,
@@ -14,7 +14,7 @@ my @fail = (
 #    [ [ -1, 1 ], [2, 2] ]
 );
 for my $f (@fail) {
-    eval { my $sp = Geo::TiledTIFF::ShapePart->new( $f ); };
+    eval { my $sp = Image::GeoTIFF::Tiled::ShapePart->new( $f ); };
     ok( $@, $@ );
 }
 
@@ -133,7 +133,7 @@ my @tests = (
 );
 
 for my $t ( @tests ) {
-    my $sp = Geo::TiledTIFF::ShapePart->new( @{$t->{use}} );
+    my $sp = Image::GeoTIFF::Tiled::ShapePart->new( @{$t->{use}} );
 #    print Dumper $sp unless
 #        is_deeply( $sp->{_points}, $t->{expect}, $sp->str );
     # Test get_point()

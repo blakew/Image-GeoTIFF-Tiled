@@ -2,8 +2,8 @@
 use strict;
 use warnings;
 use Test::More tests => 33;
-use Geo::TiledTIFF;
-#use Geo::TiledTIFF::Shape;
+use Image::GeoTIFF::Tiled;
+#use Image::GeoTIFF::Tiled::Shape;
 
 # Local horizontal vertex
 my %hv = (
@@ -18,10 +18,10 @@ my %hv = (
     ]
 );
 for (@{$hv{true}}) {
-    is( Geo::TiledTIFF::Shape::_local_hvertex(@{$_}), 1, 'local vertex' );
+    is( Image::GeoTIFF::Tiled::Shape::_local_hvertex(@{$_}), 1, 'local vertex' );
 }
 for (@{$hv{false}}) {
-    is( Geo::TiledTIFF::Shape::_local_hvertex(@{$_}), 0, 'non-local vertex' );
+    is( Image::GeoTIFF::Tiled::Shape::_local_hvertex(@{$_}), 0, 'non-local vertex' );
 }
 
 # Test custom shapes
@@ -62,11 +62,11 @@ my @shapes = (
 );
 
 for my $tiff (<./t/samples/usgs*.tif>) {
-    my $image = Geo::TiledTIFF->new($tiff);
+    my $image = Image::GeoTIFF::Tiled->new($tiff);
 
     for my $exp ( @shapes ) {
         my ($b,$p) = ($exp->{boundary},$exp->{points});
-        my $s = Geo::TiledTIFF::Shape->new({
+        my $s = Image::GeoTIFF::Tiled::Shape->new({
             x_min => $b->[0], y_min => $b->[1],
             x_max => $b->[2], y_max => $b->[3]
             });

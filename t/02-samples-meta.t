@@ -6,13 +6,13 @@ use Test::More tests => 14;
 eval { require Image::ExifTool; };
 if($@) { print "1..1\nok 1\n"; warn "skipping, Image::ExifTool not available\n"; exit } 
 
-use Geo::TiledTIFF;
+use Image::GeoTIFF::Tiled;
 
 for my $tiff (<./t/samples/usgs*.tif>) {
     my $exif = Image::ExifTool->new();
     $exif->ExtractInfo($tiff)
         or die $exif->GetValue('Error');
-    my $image = Geo::TiledTIFF->new($tiff);
+    my $image = Image::GeoTIFF::Tiled->new($tiff);
     is( 
         $image->file, 
         $tiff, 

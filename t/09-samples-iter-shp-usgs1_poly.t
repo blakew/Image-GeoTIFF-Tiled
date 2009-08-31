@@ -9,19 +9,19 @@ eval { require Geo::Proj4; };
 if($@) { print "1..1\nok 1\n"; warn "skipping, Geo::Proj4 not available\n"; exit } 
 
 require './t/test_contains.pl';     # Loads test_contains method
-use Geo::TiledTIFF;
+use Image::GeoTIFF::Tiled;
 
 #  Polygon in usgs1.tif that needs to be projected
 #   - values: 4,5
 
-my $image = Geo::TiledTIFF->new( "./t/samples/usgs1.tif" );
+my $image = Image::GeoTIFF::Tiled->new( "./t/samples/usgs1.tif" );
 my $proj = Geo::Proj4->new( "+proj=utm +zone=17 +ellps=WGS84 +units=m" )
     or die "parameter error: ".Geo::Proj4->error. "\n";
 
 my $shp = Geo::ShapeFile->new('./t/samples/usgs1_poly');
 my $shp_shape = $shp->get_shp_record(1);
 my $shape = 
-    Geo::TiledTIFF::Shape->load_shape($image,$proj,$shp_shape);
+    Image::GeoTIFF::Tiled::Shape->load_shape($image,$proj,$shp_shape);
 my $iter = $image->get_iterator_shape($shape);
 
 #$iter->dump_buffer;

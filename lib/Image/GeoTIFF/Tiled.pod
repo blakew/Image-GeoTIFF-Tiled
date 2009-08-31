@@ -1,0 +1,208 @@
+=head1 NAME
+
+Image::GeoTIFF::Tiled - A Perl interface to libgeotiff for tiled TIFF images, with support for extracting and iterating arbitrary shapes.
+
+=head1 SYNOPSIS
+
+    use Image::GeoTIFF::Tiled;
+    
+    my $t = Image::GeoTIFF::Tiled->new( $image_file );
+    
+    # Dump meta info
+    $t->print_meta;
+    
+    # Convert to pixel coordinates
+    $t->proj2pix_m($lon,$lat);
+    # Compute tile number
+    my $tile = $t->get_tile_pix($lon,$lat);
+    # Get index into the tile
+    my $idx = $t->get_pix_idx($lon,$lat);
+    
+    my ($px,$py);
+    # Get pixel coordinates of 5th pixel in the 2nd tile
+    $t->set_pix_tile( 2, 5, $px, $py );
+    # Get the projected coordinates of the pixel coordinates
+    $t->pix2proj_m($px,$py);
+    
+    # Get an arrayref of tile data (500th tile)
+    my $tile = $t->get_tile(500);
+    # Get a 2x2 3D arrayref of tile data
+    my $tiles = $t->get_tiles(500,500 + $t->tile_step + 1);
+    # 50th pixel value in the upper right tile:    $tiles->[0][1][50]
+    
+    # Get an iterator for a rectangular pixel boundary:
+    my $iter = $t->get_iterator_pix( 
+        $t->get_pix_tile( 500, 0 ),     
+            # upper left coordinate (x_min,y_min)
+        $t->get_pix_tile( 500 + $t->tile_step + 1, $t->tile_length * $t->tile_width - 1 )
+            # bottom right coordinate (x_max,y_max)
+    );
+    # or: Get an iterator for an arbitrary shape
+    my $iter = $t->get_iterator_shape( $shape );
+    # Count the occurance of each pixel value
+    my %c;
+    $c{$v}++ while ( defined( my $v = $iter->next ) );
+    
+=head1 DESCRIPTION
+
+Image::GeoTIFF::Tiled provides an interface to libtiff and libgeotiff for raster data stored in tiled TIFF format conforming to the GeoTIFF specification. Several additional functions are provided for ease of access to the underlying geodata.
+
+This library is only meant to process tiled GeoTIFF images, and in fact will fail during construction if the image isn't tiled. To create a tiled GeoTIFF from a non-tiled GeoTIFF, see the command-line utility gtifcp. Arbitrary raster data can be exported to the tiled GeoTIFF format with GIS software.
+
+=head1 METHODS
+
+=head2 CONSTRUCTOR
+
+=over
+
+=item new($tiff_filepath)
+
+Returns a new Image::GeoTIFF::Tiled instance corresponding to the given TIFF filepath. 
+
+An exception will be thrown if the filepath is invalid, if the image isn't tiled, if the bits per sample isn't 8, or if the samples per pixel isn't 1.
+
+=back
+
+=head2 IMAGE METADATA
+
+=over
+
+=item file
+
+The filepath of the TIFF image.
+
+=item length
+
+The length (height) of the image in pixels.
+
+=item width
+
+The width of the image in pixels.
+
+=item tile_length
+
+The length (height) of a single tile in pixels.
+
+=item tile_width
+
+The width of a single tile in pixels.
+
+=item tile_size
+
+The total size (in bytes) of a tile of pixels (= tile_width * tile_length if bps = 1).
+
+=item tile_step
+
+The number of tiles in a row of the image.
+
+=item dump_tile($tile)
+
+Pretty-prints the given tile.
+
+=back
+
+=head2 PIXEL-PROJECTION TRANSFORMATIONS
+
+=over
+
+=item center_pixel($x,$y)
+
+Centers the given pixel coordinates to the middle of the pixel (mutative).
+
+=item proj2pix_m($x,$y)
+
+Transforms the given projection coordinate to its corresponding pixel coordinate (mutative).
+
+=item proj2pix($x,$y)
+
+Transforms the given projection coordinate, returning its corresponding pixel coordinate as a list.
+
+=item pix2proj_m($x,$y)
+
+Transforms the given pixel coordinate to its corresponding projection coordinate (mutative).
+
+=item pix2proj($x,$y)
+
+Transforms the given pixel coordinate, returning its corresponding projection coordinate as a list.
+
+=back
+
+=head2 PIXEL-TILE TRANSFORMATIONS
+
+=over
+
+=item get_tile_pix($x,$y)
+
+Returns the tile number of the given pixel coordinates (see TIFFComputeTile in libtiff).
+
+=item set_pix_tile($tile,$idx,$x,$y)
+
+Given a tile number and the index into the tile, sets the corresponding pixel coordinates (mutative).
+
+=item get_pix_tile($tile,$idx)
+
+Given a tile number and the index into the tile, returns the corresponding pixel coordinates as a list.
+
+=item get_pix_idx($x,$y)
+
+Given pixel coordinates, returns the index into its tile.
+
+=back
+
+=head2 TILE DATA
+
+=over
+
+=item get_tile($n)
+
+Returns a reference to a flat array containing the data in the nth tile.
+
+=item get_tiles($ul,$br)
+
+Returns a reference to a 3D array (a 2D grid of references to the flat tile arrays) containing the tile data between the upper left ($ul) and lower right ($ur) tiles. 
+
+=item extract_2D_array($x_min,$y_min,$x_max,$y_max,$shape)
+
+Returns a reference to a 2D array of data contained in the pixel boundary ($x_min,$y_min,$x_max,$y_max) and constrained within the Image::GeoTIFF::Tiled::Shape $shape. Pass undef as $shape to just get the block of data without constraining to a shape; otherwise data outside of $shape will take the value -1.
+
+Calling this method directly is equivalent to calling the iterator methods below and retrieving the underlying data via buffer() in Image::GeoTIFF::Tiled::Iterator.
+
+=back
+
+=head2 ITERATION
+
+=over
+
+=item get_iterator_pix($x_min,$y_min,$x_max,$y_max)
+
+Given a rectangular pixel boundary, returns a C<Image::GeoTIFF::Tiled::Iterator> object that can iterate over the pixel values in the given boundary, or undef if the given boundary is completely outside the image. If part of the boundary is outside, only those pixels that are inside the image will be used.
+
+=item get_iterator_shape($shape)
+
+Given a C<Image::GeoTIFF::Tiled::Shape> object, returns a C<Image::GeoTIFF::Tiled::Iterator> that can iterate over only those pixel values inside the arbitrary shape, or undef if the given shape is completely outside the image.
+
+=back
+
+=head1 SEE ALSO
+
+Image::GeoTIFF::Tiled::Shape, Image::GeoTIFF::Tiled::Iterator, Geo::Proj4
+
+=head1 COPYRIGHT & LICENSE
+
+Copyright 2009 Blake Willmarth.
+
+This program is free software; you can redistribute it and/or
+modify it under the terms of either:
+
+=over 4
+
+=item * the GNU General Public License as published by the Free
+Software Foundation; either version 1, or (at your option) any
+later version, or
+
+=item * the Artistic License version 2.0.
+
+=back
+
+=cut
+

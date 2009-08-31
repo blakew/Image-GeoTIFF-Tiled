@@ -2,10 +2,10 @@
 use strict;
 use warnings;
 use Test::More tests => 44; 
-use Geo::TiledTIFF;
+use Image::GeoTIFF::Tiled;
 
 for my $tiff (<./t/samples/usgs*.tif>) {
-    my $image = Geo::TiledTIFF->new($tiff);
+    my $image = Image::GeoTIFF::Tiled->new($tiff);
     my $w = $image->width;
     my $l = $image->length;
     my $iter;

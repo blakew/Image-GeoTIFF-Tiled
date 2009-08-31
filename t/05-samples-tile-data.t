@@ -2,10 +2,10 @@
 use strict;
 use warnings;
 use Test::More tests => 6; 
-use Geo::TiledTIFF;
+use Image::GeoTIFF::Tiled;
 
 for my $tiff (<./t/samples/usgs*.tif>) {
-    my $image = Geo::TiledTIFF->new($tiff);
+    my $image = Image::GeoTIFF::Tiled->new($tiff);
     my $tile = $image->get_tile(0);
 #    $image->dump_tile(0);
     my $ok = 1;
