@@ -19,5 +19,6 @@ _Inline/.*$
 00-load\.t$
 
 # WEIRD Inline condition - move TiledTIFF.pm to root directory
-lib/Geo/TiledTIFF.pm
+#lib/Geo/TiledTIFF.pm
+lib/Image/GeoTIFF/Tiled.pm
 

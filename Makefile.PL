@@ -1,5 +1,6 @@
 use 5.9.3;
-use Inline::MakeMaker;
+eval 'use Inline::MakeMaker';
+die "Inline required for building XS" if $@;
 WriteMakefile(
     NAME              => 'Image::GeoTIFF::Tiled',
 #    VERSION_FROM      => 'lib/Geo/TiledTIFF.pm', # finds $VERSION

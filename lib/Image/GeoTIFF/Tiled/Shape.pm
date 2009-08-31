@@ -16,7 +16,7 @@ use Image::GeoTIFF::Tiled::ShapePart;
 #   - rows should be ordered on longitude (x) (specific method call when using main method)
 
 use vars qw/ $VERSION /;
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 #================================================================================================#
 
@@ -297,7 +297,7 @@ where %boundary has the x_min, y_min, x_max, and y_max keys filled or @boundary 
 
 Loads a pre-defined shape object defined by an external class. Currently only loads L<Geo::ShapeFile::Shape> objects. 
 
-Geo::Proj4 and Image::GeoTIFF::Tiled objects must be pre-loaded into the class before calling this method, unless the shape is already projected, in which case pass undef as the $proj parameter.
+L<Geo::Proj4> and L<Image::GeoTIFF::Tiled> objects must be pre-loaded into the class before calling this method, unless the shape is already projected, in which case pass undef as the $proj parameter.
 
 =back
 
@@ -311,7 +311,7 @@ Retrieves the boundary values.
 
 =item boundary
 
-Equivalent to (C<$shape-&gt;x_min>, C<$shape-&gt;y_min>, C<$shape-&gt;x_max>, C<$shape-&gt;y_max>).
+Equivalent to (C<$shape->x_min>, C<$shape->y_min>, C<$shape->x_max>, C<$shape->y_max>).
 
 =item corners
 
@@ -319,11 +319,11 @@ Returns a list of four two-element arrayref's containing the upper left, lower l
 
 =item num_parts
 
-Returns the number of Image::GeoTIFF::Tiled::ShapePart's in this shape.
+Returns the number of L<Image::GeoTIFF::Tiled::ShapePart>'s in this shape.
 
 =item get_part($i)
 
-Returns the ith Image::GeoTIFF::Tiled::ShapePart in this shape.
+Returns the ith L<Image::GeoTIFF::Tiled::ShapePart> in this shape.
 
 =item as_array
 
@@ -335,11 +335,11 @@ Adds the ($x,$y) point to this shape. Only used for making custom shapes.
 
 =item project_boundary($proj,$b)
 
-Class method. Returns the projected boundary using projection (Geo::Proj4) $proj and boundary $b, a 4-element array ref with x_min, y_min, x_max, y_max as values.
+Class method. Returns the projected boundary using projection (L<Geo::Proj4>) $proj and boundary $b, a 4-element array ref with x_min, y_min, x_max, y_max as values.
 
 =item get_x($y)
 
-Returns a reference to a sorted array containing all x-pixel values along the integer y latitude. This method is used to determine if a given pixel lies inside the shape by implementing a ray-casting algorithm using a state machine (either OUTSIDE or INSIDE).
+Returns a reference to a sorted array containing all x-pixel values along the integer y latitude. This method is used to determine if a given pixel lies inside the shape by implementing a ray-casting algorithm using a state machine (either outside or inside).
 
 Repeated values indicate a local horizontal vertex.
 

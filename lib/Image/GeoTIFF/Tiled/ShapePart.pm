@@ -4,7 +4,7 @@ use warnings;
 use Carp;
 
 use vars qw/ $VERSION /;
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 # Parts are lines (start != end) or horizontal vertexes (start = end)
 
@@ -139,7 +139,7 @@ Image::GeoTIFF::Tiled::ShapePart
 
 =head1 DESCRIPTION
 
-This class is used by Image::GeoTIFF::Tiled::Shape to represent a single "part" of a shape (a line between two points), shapes being made up of multiple parts.
+This class is used by L<Image::GeoTIFF::Tiled::Shape> to represent a single "part" of a shape (a line between two points), shapes being made up of multiple parts.
 
 Whenever the start or end points are set, the linear interpolation along integer y-values are calculated and stored. Interpolation is done at the middle of the pixel latitude.
 

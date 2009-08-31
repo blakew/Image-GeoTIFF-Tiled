@@ -6,7 +6,7 @@ use Image::GeoTIFF::Tiled::Iterator;
 use Image::GeoTIFF::Tiled::Shape;
 
 use vars qw( $VERSION );
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 use Inline C => Config => 
              INC => '-I/usr/include/geotiff',
@@ -17,7 +17,7 @@ use Inline C => Config =>
             ;
 
 use Inline C => 'DATA',
-    VERSION => '0.01',
+    VERSION => '0.02',
     NAME => 'Image::GeoTIFF::Tiled'; 
 
 sub _constrain_boundary {

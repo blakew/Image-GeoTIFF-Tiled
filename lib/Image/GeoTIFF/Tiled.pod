@@ -49,6 +49,8 @@ Image::GeoTIFF::Tiled provides an interface to libtiff and libgeotiff for raster
 
 This library is only meant to process tiled GeoTIFF images, and in fact will fail during construction if the image isn't tiled. To create a tiled GeoTIFF from a non-tiled GeoTIFF, see the command-line utility gtifcp. Arbitrary raster data can be exported to the tiled GeoTIFF format with GIS software.
 
+A copy of the source repository is hosted on github: L<http://github.com/blakew/Image-GeoTIFF-Tiled>.
+
 =head1 METHODS
 
 =head2 CONSTRUCTOR
@@ -57,7 +59,7 @@ This library is only meant to process tiled GeoTIFF images, and in fact will fai
 
 =item new($tiff_filepath)
 
-Returns a new Image::GeoTIFF::Tiled instance corresponding to the given TIFF filepath. 
+Returns a new C<Image::GeoTIFF::Tiled> instance corresponding to the given TIFF filepath. Internally a filehandle to the image is stored along with some metadata.
 
 An exception will be thrown if the filepath is invalid, if the image isn't tiled, if the bits per sample isn't 8, or if the samples per pixel isn't 1.
 
@@ -163,9 +165,9 @@ Returns a reference to a 3D array (a 2D grid of references to the flat tile arra
 
 =item extract_2D_array($x_min,$y_min,$x_max,$y_max,$shape)
 
-Returns a reference to a 2D array of data contained in the pixel boundary ($x_min,$y_min,$x_max,$y_max) and constrained within the Image::GeoTIFF::Tiled::Shape $shape. Pass undef as $shape to just get the block of data without constraining to a shape; otherwise data outside of $shape will take the value -1.
+Returns a reference to a 2D array of data contained in the pixel boundary ($x_min,$y_min,$x_max,$y_max) and constrained within the L<Image::GeoTIFF::Tiled::Shape> $shape. Pass undef as $shape to just get the block of data without constraining to a shape; otherwise data outside of $shape will take the value -1.
 
-Calling this method directly is equivalent to calling the iterator methods below and retrieving the underlying data via buffer() in Image::GeoTIFF::Tiled::Iterator.
+Calling this method directly is equivalent to calling the iterator methods below and retrieving the underlying data via buffer() in L<Image::GeoTIFF::Tiled::Iterator>.
 
 =back
 
@@ -175,11 +177,11 @@ Calling this method directly is equivalent to calling the iterator methods below
 
 =item get_iterator_pix($x_min,$y_min,$x_max,$y_max)
 
-Given a rectangular pixel boundary, returns a C<Image::GeoTIFF::Tiled::Iterator> object that can iterate over the pixel values in the given boundary, or undef if the given boundary is completely outside the image. If part of the boundary is outside, only those pixels that are inside the image will be used.
+Given a rectangular pixel boundary, returns a L<Image::GeoTIFF::Tiled::Iterator> object that can iterate over the pixel values in the given boundary, or undef if the given boundary is completely outside the image. If part of the boundary is outside, only those pixels that are inside the image will be used.
 
 =item get_iterator_shape($shape)
 
-Given a C<Image::GeoTIFF::Tiled::Shape> object, returns a C<Image::GeoTIFF::Tiled::Iterator> that can iterate over only those pixel values inside the arbitrary shape, or undef if the given shape is completely outside the image.
+Given a L<Image::GeoTIFF::Tiled::Shape> object, returns a L<Image::GeoTIFF::Tiled::Iterator> that can iterate over only those pixel values inside the arbitrary shape, or undef if the given shape is completely outside the image.
 
 =back
 

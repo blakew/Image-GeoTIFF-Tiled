@@ -6,7 +6,7 @@ use Carp;
 use Image::GeoTIFF::Tiled;
 
 use vars qw/ $VERSION /;
-$VERSION = '0.01';
+$VERSION = '0.02';
 
 #================================================================================================#
 # Constructor
@@ -37,20 +37,20 @@ sub _verify {
     my ($self) = @_;
     my ($image,$boundary,$buffer) = 
         ( $self->image, $self->boundary, $self->buffer );
-    confess "Image::GeoTIFF::Tiled object required."
+    confess "Image::GeoTIFF::Tiled object required"
         unless defined $image and ref $image and $image->isa('Image::GeoTIFF::Tiled');
-    confess "Boundary required."
+    confess "Boundary required"
         unless defined $boundary;
-    confess "Array ref of size 4 required for boundary."
+    confess "Array ref of size 4 required for boundary"
         unless ref $boundary and ref $boundary eq 'ARRAY'
         and scalar @{$boundary} == 4;
-    confess "Buffered data required."
+    confess "Buffered data required"
         unless defined $buffer;
     
         unless (ref $buffer and ref $buffer eq 'ARRAY'
         and ref $buffer->[0] and ref $buffer->[0] eq 'ARRAY') {
 #             print Dumper $buffer;
-             confess "Buffered data needs to be a 2D arrayref.";
+             confess "Buffered data needs to be a 2D arrayref";
          }
     # Note: if rows,cols = 0 then just return undef
 #    confess "No rows/cols; boundary needs to be (x_min,y_min,x_max,y_max) pixels."
@@ -189,7 +189,7 @@ Where %opts must have the keys image, boundary, and buffer. Used by get_iterator
 
 =item image
 
-The C<Image::GeoTIFF::Tiled> object.
+The L<Image::GeoTIFF::Tiled> object.
 
 =item boundary
 

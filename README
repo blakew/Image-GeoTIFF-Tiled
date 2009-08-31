@@ -1,4 +1,4 @@
-Image-GeoTIFF-Tiled version 0.01
+Image-GeoTIFF-Tiled version 0.02
 ======================================
 
 A Perl interface to libgeotiff for tiled geoTIFF images, with support 
@@ -18,6 +18,11 @@ The links to libtiff and libgeotiff were configured on my machine (Ubuntu
 search path. Windows installations will probably have problems too - I would
 appreciate any assistance in improving the Makefile configuration.
 
+In the github repository there are two main class files (Tiled.pm). They are
+exact copies except the one in the top-level directory has the Inline VERSION
+uncommented. This one is used for installation by Inline. The one in the lib/
+directory is used for manual testing (instead of make, make test).
+
 DEPENDENCIES
 
 This module requires these other modules and libraries:
@@ -25,6 +30,7 @@ This module requires these other modules and libraries:
   libtiff
   libgeotiff
 
+  Inline
   Module::Load
   List::MoreUtils
 

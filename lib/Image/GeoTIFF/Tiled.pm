@@ -17,7 +17,7 @@ use Inline C => Config =>
             ;
 
 use Inline C => 'DATA',
-#    VERSION => '0.01',
+#    VERSION => '0.02',
     NAME => 'Image::GeoTIFF::Tiled'; 
 
 sub _constrain_boundary {
