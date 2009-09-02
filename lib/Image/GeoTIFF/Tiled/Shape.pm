@@ -47,11 +47,13 @@ sub new {
 
 sub load_shape {
     my ($class,$tiff,$proj,$shape) = @_;
-    croak "loading shapes must be done by the class." if ref $class;
-#    croak "Geo::Projection required." unless defined $proj and ref $proj and $proj->isa("Geo::Projection");
-    croak "Image::GeoTIFF::Tiled required." unless defined $tiff and ref $tiff and $tiff->isa("Image::GeoTIFF::Tiled");
+    croak "loading shapes must be done by the class" 
+        if ref $class;
+    croak "Image::GeoTIFF::Tiled required" 
+        unless defined $tiff and ref $tiff and $tiff->isa("Image::GeoTIFF::Tiled");
     if ( defined $proj ) {
-        croak "Geo::Proj4 required." unless ref $proj and $proj->isa("Geo::Proj4");
+        croak "Geo::Proj4 required as the projection class" 
+            unless ref $proj and $proj->isa("Geo::Proj4");
         load 'Geo::Proj4';
     } 
     my $self;
@@ -63,19 +65,18 @@ sub load_shape {
             $shape->x_max,
             $shape->y_max
         ];
-#        $proj->project_boundary_m(@$boundary);
         Image::GeoTIFF::Tiled::Shape->project_boundary($proj,$boundary)
-                if defined $proj;
+            if defined $proj;
         $self = Image::GeoTIFF::Tiled::Shape->new(
             [ $tiff->proj2pix_boundary(@$boundary) ]
         );
         for my $i ( 1..$shape->num_parts ) {
+            $self->reset_points;
             for ( $shape->get_part($i) ) {
-#                my ($x,$y) = $tiff->proj2pix($proj->project($_->X,$_->Y));
                 my ($x,$y) = 
-                        defined $proj 
-                            ? ($proj->forward($_->Y,$_->X))
-                            : ($_->X,$_->Y); 
+                    defined $proj 
+                        ? ($proj->forward($_->Y,$_->X))
+                        : ($_->X,$_->Y); 
                 $self->add_point($tiff->proj2pix($x,$y));
             }
         }
@@ -137,6 +138,13 @@ sub corners {
 }
 
 #================================================================================================#
+
+sub reset_points {
+    my ($self) = @_;
+    undef $self->{$_} for (
+        qw/ _first_point _last_end _last_start /
+    );
+}
 
 sub add_point {
     my ($self,$x,$y) = @_;
@@ -201,7 +209,11 @@ sub as_array {
 
 sub num_parts {
     my ($self) = @_;
-    return defined $self->{_parts} ? scalar @{$self->{_parts}} : 0;
+    return (
+       defined $self->{_parts} 
+        ? scalar @{$self->{_parts}} 
+        : 0
+    );
 }
 
 sub get_part {
@@ -230,7 +242,7 @@ sub get_x {
     return \@x;
 }
 
-# - NOTE: IF TWO EQUAL X VALUES ARE OBTAINED, ITS A LOCAL HORIZONTAL VERTEX AND SHOULDN'T CHANGE THE
+# - NOTE: IF TWO EQUAL X VALUES ARE OBTAINED, IT'S A LOCAL HORIZONTAL VERTEX AND SHOULDN'T CHANGE THE
 #   INSIDE/OUTSIDE STATE (or should be changed twice - resulting in the same state AFTER the point is checked)
 
 #================================================================================================#
@@ -332,6 +344,10 @@ Returns a 2D array reference of [ start, end ] points corresponding to each part
 =item add_point($x,$y)
 
 Adds the ($x,$y) point to this shape. Only used for making custom shapes.
+
+=item reset_points
+
+Resets internal points metadata. Only used for making custom shapes, after a series of connecting points are made concentric ("parts" in ShapeFile parlance).
 
 =item project_boundary($proj,$b)
 
