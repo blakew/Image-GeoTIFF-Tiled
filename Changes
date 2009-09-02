@@ -1,5 +1,10 @@
 Revision history for Perl extension Image::GeoTIFF::Tiled.
 
+0.03  Wed Sep 02 04:27:00 2009
+    - fixed bug where x values during ray-casting were being
+      sorted lexically instead of numerically
+        --changed get_x() in Shape.pm
+
 0.02  Mon Aug 31 04:10:00 2009
     - allow loading of all multi-part ShapeFile types
         --added reset_points() method in Shape.pm

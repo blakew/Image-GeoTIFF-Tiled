@@ -6,7 +6,7 @@ use Carp;
 use Image::GeoTIFF::Tiled;
 
 use vars qw/ $VERSION /;
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 #================================================================================================#
 # Constructor

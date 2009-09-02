@@ -16,7 +16,7 @@ use Image::GeoTIFF::Tiled::ShapePart;
 #   - rows should be ordered on longitude (x) (specific method call when using main method)
 
 use vars qw/ $VERSION /;
-$VERSION = '0.02';
+$VERSION = '0.03';
 
 #================================================================================================#
 
@@ -236,8 +236,9 @@ sub get_x {
     my @x = 
 #     return
         sort 
-#                    { $a->[0] <=> $b->[0] }    # point sorting
-            map { $_->get_x($y) } @parts;
+#            { $a->[0] <=> $b->[0] }    # point sorting
+            { $a <=> $b }
+                map { $_->get_x($y) } @parts;
 #    print "(",join (', ',map { sprintf("%.2f",$_) } @x),")\n";
     return \@x;
 }

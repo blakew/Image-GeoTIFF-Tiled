@@ -1,4 +1,4 @@
-Image-GeoTIFF-Tiled version 0.02
+Image-GeoTIFF-Tiled version 0.03
 ======================================
 
 A Perl interface to libgeotiff for tiled geoTIFF images, with support 
