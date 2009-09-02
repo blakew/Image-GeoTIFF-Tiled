@@ -2,6 +2,7 @@ Revision history for Perl extension Image::GeoTIFF::Tiled.
 
 0.02  Mon Aug 31 04:10:00 2009
     - allow loading of all multi-part ShapeFile types
+        --added reset_points() method in Shape.pm
     - cleaned up distribution
         --removed Tiled.pm from lib/ in make
 
