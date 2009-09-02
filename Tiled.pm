@@ -622,7 +622,8 @@ SV* extract_2D_array(SV* obj, SV* svx_min, SV* svy_min, SV* svx_max, SV* svy_max
             x_values = _get_x_values(shape,py);    // Change state whenever we cross any of these guys
             xv_length = av_len( (AV*)SvRV(x_values) ) + 1;
             // Allocate and copy x_values into double* dx_values
-            Newx(dx_values,xv_length,double);
+//            Newx(dx_values,xv_length,double);
+            New(42,dx_values,xv_length,double);
             for ( i = 0; i < xv_length; i++ ) {
                 dx_values[i] = (double)SvNV( (SV*)*av_fetch((AV*)SvRV(x_values), i, 0) ); 
             }
@@ -761,8 +762,8 @@ SV* new( char* class, const char* file ) {
     SV*      obj_ref = newSV(0);
     SV*      obj = newSVrv(obj_ref, class);
     
-//    New(42, image, 1, Image);
-    Newx(image, 1, Image);
+    New(42, image, 1, Image);
+//    Newx(image, 1, Image);
     
     image->file = savepv(file);
     
