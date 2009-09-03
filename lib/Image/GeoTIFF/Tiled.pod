@@ -1,6 +1,6 @@
 =head1 NAME
 
-Image::GeoTIFF::Tiled - A Perl interface to libgeotiff for tiled TIFF images, with support for extracting and iterating arbitrary shapes.
+Image::GeoTIFF::Tiled - A Perl interface to libgeotiff for reading tiled TIFF images, with support for extracting and iterating arbitrary shapes.
 
 =head1 SYNOPSIS
 
@@ -45,7 +45,7 @@ Image::GeoTIFF::Tiled - A Perl interface to libgeotiff for tiled TIFF images, wi
     
 =head1 DESCRIPTION
 
-Image::GeoTIFF::Tiled provides an interface to libtiff and libgeotiff for raster data stored in tiled TIFF format conforming to the GeoTIFF specification. Several additional functions are provided for ease of access to the underlying geodata.
+Image::GeoTIFF::Tiled provides an interface to libtiff and libgeotiff for reading raster data stored in tiled TIFF format conforming to the GeoTIFF specification. Several additional functions are provided for ease of access to the underlying geodata.
 
 This library is only meant to process tiled GeoTIFF images, and in fact will fail during construction if the image isn't tiled. To create a tiled GeoTIFF from a non-tiled GeoTIFF, see the command-line utility gtifcp. Arbitrary raster data can be exported to the tiled GeoTIFF format with GIS software.
 
